@@ -1,6 +1,6 @@
-# 🚀 Fulltime API
+# 🚀 Blog API
 
-Welcome to the My Hexagonal API project! This is a simple Express-based backend API following the hexagonal architecture pattern and integrated with Swagger for API documentation.
+Welcome to the m API project! This is a simple Express-based backend API following the hexagonal architecture pattern and integrated with Swagger for API documentation.
 
 ## 📦 Getting Started
 
