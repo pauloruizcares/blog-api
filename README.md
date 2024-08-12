@@ -65,6 +65,10 @@ These instructions will help you get a copy of the project up and running on you
    ```env
    MONGODB_URI=mongodb://root:<<password>></password>@localhost:27017/mydatabase?authSource=admin
    PORT=3000
+   GOOGLE_CLIENT_ID=<<hash>>.apps.googleusercontent.com
+   GOOGLE_CLIENT_SECRET=<<GOOGLE_CLIENT_SECRET>>
+   PORT=4000
+   ```
 
 5. **Start the Application**
 
@@ -104,8 +108,9 @@ fulltime-api/
 ├── src/
 │ ├── adapters/
 │ ├── config/
-│ ├── domain/
+│ ├── core/
 │ ├── infrastructure/
+│ ├── models/
 │ └── routes/
 ├── .env
 ├── docker-compose.yml
