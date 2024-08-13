@@ -1,6 +1,9 @@
 import { Router } from 'express';
-import { createBlogPost, getBlogPostById, updateBlogPost, deleteBlogPost, getBlogPosts } from '../adapters/controllers/BlogPostController';
+import { BlogPostController } from '../adapters/controllers/BlogPostController';
+import { container } from "../config/inversify";
+import { TYPES } from "../config/types";
 
+const blogPostController = container.get<BlogPostController>(TYPES.BlogPostController);
 const router = Router();
 
 /**
@@ -28,7 +31,7 @@ const router = Router();
  *       400:
  *         description: Bad request
  */
-router.post('/', createBlogPost);
+router.post('/', blogPostController.createBlogPost);
 
 /**
  * @swagger
@@ -40,7 +43,7 @@ router.post('/', createBlogPost);
  *       200:
  *         description: Blog posts retrieved successfully
  */
-router.get('/', getBlogPosts);
+router.get('/', blogPostController.getBlogPosts);
 
 /**
  * @swagger
@@ -61,7 +64,7 @@ router.get('/', getBlogPosts);
  *       404:
  *         description: Blog post not found
  */
-router.get('/:id', getBlogPostById);
+router.get('/:id', blogPostController.getBlogPostById);
 
 /**
  * @swagger
@@ -97,7 +100,7 @@ router.get('/:id', getBlogPostById);
  *       400:
  *         description: Bad request
  */
-router.put('/:id', updateBlogPost);
+router.put('/:id', blogPostController.updateBlogPost);
 
 
 /**
@@ -119,7 +122,7 @@ router.put('/:id', updateBlogPost);
  *       400:
  *         description: Bad request
  */
-router.delete('/:id', deleteBlogPost);
+router.delete('/:id', blogPostController.deleteBlogPost);
 
 
 export default router;

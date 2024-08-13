@@ -1,8 +1,14 @@
 import { BlogPostRepositoryPort } from "../ports/BlogPostRepositoryPort";
 import { BlogPost } from "../entities/BlogPost";
+import { TYPES } from "../../config/types";
+import { inject, injectable } from "inversify";
 
+@injectable()
 export class BlogPostService {
-  constructor(private blogPostRepository: BlogPostRepositoryPort) {}
+  constructor(
+    @inject(TYPES.BlogPostRepository)
+    private blogPostRepository: BlogPostRepositoryPort
+  ) {}
 
   async createBlogPost(
     title: string,

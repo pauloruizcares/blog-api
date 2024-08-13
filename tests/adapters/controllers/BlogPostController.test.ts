@@ -1,36 +1,28 @@
 import request from "supertest";
 import express, { Application } from "express";
-import {
-  createBlogPost,
-  getBlogPostById,
-  updateBlogPost,
-  getBlogPosts,
-  deleteBlogPost,
-} from "../../../src/adapters/controllers/BlogPostController";
+import { BlogPostController } from "../../../src/adapters/controllers/BlogPostController";
 import { BlogPostService } from "../../../src/core/services/BlogPostService";
 import { BlogPostRepository } from "../../../src/adapters/repositories/BlogPostRepository";
 import { BlogPost } from "../../../src/core/entities/BlogPost";
 
-const app: Application = express();
-app.use(express.json());
-
-app.post("/blog-posts", createBlogPost);
-app.get("/blog-posts/:id", getBlogPostById);
-app.put("/blog-posts/:id", updateBlogPost);
-app.get("/blog-posts", getBlogPosts);
-app.delete("/blog-posts/:id", deleteBlogPost);
-
 jest.mock("../../../src/core/services/BlogPostService");
 jest.mock("../../../src/adapters/repositories/BlogPostRepository");
 
-describe("BlogPost Controller", () => {
-  let blogPostService: jest.Mocked<BlogPostService>;
+const app: Application = express();
+app.use(express.json());
 
-  beforeEach(() => {
-    blogPostService = new BlogPostService(
-      new BlogPostRepository()
-    ) as jest.Mocked<BlogPostService>;
-  });
+describe("BlogPost Controller", () => {
+  const blogPostService = new BlogPostService(
+    new BlogPostRepository()
+  ) as jest.Mocked<BlogPostService>;
+
+  const blogPostController = new BlogPostController(blogPostService);
+
+  app.post("/blog-posts", blogPostController.createBlogPost);
+  app.get("/blog-posts/:id", blogPostController.getBlogPostById);
+  app.put("/blog-posts/:id", blogPostController.updateBlogPost);
+  app.get("/blog-posts", blogPostController.getBlogPosts);
+  app.delete("/blog-posts/:id", blogPostController.deleteBlogPost);
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -45,16 +37,23 @@ describe("BlogPost Controller", () => {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
+
     blogPostService.createBlogPost.mockResolvedValue(newPost);
 
     const response = await request(app).post("/blog-posts").send(newPost);
 
+    const responseBody = {
+      ...response.body,
+      createdAt: new Date(response.body.createdAt),
+      updatedAt: new Date(response.body.updatedAt),
+    };
+
     expect(response.status).toBe(201);
-    expect(response.body).toEqual(newPost);
+    expect(responseBody).toEqual(newPost);
     expect(blogPostService.createBlogPost).toHaveBeenCalledWith(
       "Test Title",
       "Test Content",
-      "Test Author"
+      "Test Author",
     );
   });
 
@@ -71,8 +70,14 @@ describe("BlogPost Controller", () => {
 
     const response = await request(app).get("/blog-posts/1");
 
+    const responseBody = {
+      ...response.body,
+      createdAt: new Date(response.body.createdAt),
+      updatedAt: new Date(response.body.updatedAt),
+    };
+
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(blogPost);
+    expect(responseBody).toEqual(blogPost);
     expect(blogPostService.getBlogPostById).toHaveBeenCalledWith("1");
   });
 
@@ -89,8 +94,14 @@ describe("BlogPost Controller", () => {
 
     const response = await request(app).put("/blog-posts/1").send(updatedPost);
 
+    const responseBody = {
+      ...response.body,
+      createdAt: new Date(response.body.createdAt),
+      updatedAt: new Date(response.body.updatedAt),
+    };
+
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(updatedPost);
+    expect(responseBody).toEqual(updatedPost);
     expect(blogPostService.updateBlogPost).toHaveBeenCalledWith(
       "1",
       "Updated Title",
@@ -114,13 +125,19 @@ describe("BlogPost Controller", () => {
 
     const response = await request(app).get("/blog-posts");
 
+    const responseBody = response.body.map((post: BlogPost) => ({
+      ...post,
+      createdAt: new Date(post.createdAt),
+      updatedAt: new Date(post.updatedAt),
+    }));
+
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(blogPosts);
+    expect(responseBody).toEqual(blogPosts);
     expect(blogPostService.getBlogPosts).toHaveBeenCalled();
   });
 
   it("should delete a blog post by id", async () => {
-    blogPostService.deleteBlogPost.mockResolvedValue(undefined);
+    blogPostService.deleteBlogPost.mockResolvedValue();
 
     const response = await request(app).delete("/blog-posts/1");
 
