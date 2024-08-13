@@ -8,8 +8,8 @@ import { BlogPostRepositoryPort } from "../core/ports/BlogPostRepositoryPort";
 
 const container = new Container();
 
-container.bind<BlogPostController>(TYPES.BlogPostController).toSelf();
-container.bind<BlogPostService>(TYPES.BlogPostService).toSelf();
+container.bind<BlogPostController>(BlogPostController).toSelf();
+container.bind<BlogPostService>(BlogPostService).toSelf();
 container.bind<BlogPostRepositoryPort>(TYPES.BlogPostRepository).to(BlogPostRepository);
 
 export { container };

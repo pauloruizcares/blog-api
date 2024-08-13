@@ -1,14 +1,12 @@
 import { Request, Response } from "express";
 import { BlogPostService } from "../../core/services/BlogPostService";
-import { BlogPostRepository } from "../repositories/BlogPostRepository";
-import { TYPES } from "../../config/types";
 import { inject, injectable } from "inversify";
 
 @injectable()
 export class BlogPostController {
   private blogPostService: BlogPostService;
 
-  constructor(@inject(TYPES.BlogPostService) blogPostService: BlogPostService) {
+  constructor(@inject(BlogPostService) blogPostService: BlogPostService) {
     this.blogPostService = blogPostService;
   }
 

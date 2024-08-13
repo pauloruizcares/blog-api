@@ -1,9 +1,8 @@
 import { Router } from 'express';
 import { BlogPostController } from '../adapters/controllers/BlogPostController';
 import { container } from "../config/inversify";
-import { TYPES } from "../config/types";
 
-const blogPostController = container.get<BlogPostController>(TYPES.BlogPostController);
+const blogPostController = container.get<BlogPostController>(BlogPostController);
 const router = Router();
 
 /**

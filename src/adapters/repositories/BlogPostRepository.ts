@@ -1,7 +1,9 @@
 import { BlogPostRepositoryPort } from "../../core/ports/BlogPostRepositoryPort";
 import { BlogPost } from "../../core/entities/BlogPost";
 import BlogPostModel from "../../models/BlogPostModel";
+import { injectable } from "inversify";
 
+@injectable()
 export class BlogPostRepository implements BlogPostRepositoryPort {
   async createBlogPost(blogPost: BlogPost): Promise<BlogPost> {
     const newBlogPost = new BlogPostModel({
