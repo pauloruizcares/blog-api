@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node src/infrastructure/server.ts",
     "build": "tsc",
-    "serve": "node dist/server.js",
+    "serve": "node dist/infrastructure/server.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/infrastructure/server.ts"
   },
   "keywords": [],
