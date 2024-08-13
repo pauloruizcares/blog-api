@@ -13,7 +13,11 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
       createdAt: blogPost.createdAt,
       updatedAt: blogPost.updatedAt,
     });
+
+    BlogPostModel.create(newBlogPost);
+
     await newBlogPost.save();
+
     return new BlogPost(
       newBlogPost.id,
       newBlogPost.title,
