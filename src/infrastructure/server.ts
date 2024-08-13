@@ -10,15 +10,16 @@ import cors from "cors";
 import morgan from "morgan";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import cookieParser from "cookie-parser";
-
-const corsOptions = {
-  origin: "http://localhost:3000", // URL del frontend
-  methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
-  allowedHeaders: ["Content-Type", "Authorization"], // Encabezados permitidos
-  credentials: true,
-};
+import { authMiddleware } from "./middleware/auth";
 
 dotenv.config();
+
+const corsOptions = {
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -66,7 +67,7 @@ passport.deserializeUser((obj: any, done: Function) => {
 
 setupSwagger(app);
 
-app.use("/api/blogposts", blogPostRoutes);
+app.use("/api/blogposts", authMiddleware, blogPostRoutes);
 app.use("/api/auth", authRoutes);
 
 connectDB()
