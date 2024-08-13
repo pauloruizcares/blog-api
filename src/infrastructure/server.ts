@@ -15,7 +15,7 @@ import { authMiddleware } from "./middleware/auth";
 dotenv.config();
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: process.env.CORS_ORIGIN || "http://localhost:3000",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(morgan("combined"));
 app.use(
   session({
-    secret: "your-session-secret",
+    secret: process.env.SESSION_SECRET || "secret",
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }, // Cambia `secure` a `true` en producción
@@ -44,7 +44,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      callbackURL: "http://localhost:4000/api/auth/google/callback",
+      callbackURL: process.env.CALLBACK_URL || "http://localhost:4000/auth/google/callback",
     },
     (
       accessToken: string,
