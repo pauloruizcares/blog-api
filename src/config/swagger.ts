@@ -11,7 +11,7 @@ const options = {
       description: "This is the API documentation for my application.",
     },
   },
-  apis: ["./src/routes/*.ts"], // Archivos donde se encuentran tus rutas y anotaciones
+  apis: ["./src/routes/*.ts"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

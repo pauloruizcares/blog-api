@@ -1,4 +1,3 @@
-// src/controllers/AuthController.ts
 import { Request, Response } from "express";
 import passport from "passport";
 
